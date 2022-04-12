@@ -15,16 +15,20 @@
         <div>
           <div class="username">用户名</div>
           <div>
-            <el-input class="input"></el-input>
+            <el-input class="input" v-model="username"></el-input>
           </div>
           <div class="password">密码</div>
           <div>
-            <el-input class="input" type="password"></el-input>
+            <el-input
+              class="input"
+              type="password"
+              v-model="password"
+            ></el-input>
           </div>
           <div class="radio">
-            <el-radio label="1">用户</el-radio>
-            <el-radio label="2">接种点管理员</el-radio>
-            <el-radio label="3">超级管理员</el-radio>
+            <el-radio v-model="role" label="1">用户</el-radio>
+            <el-radio v-model="role" label="2">接种点管理员</el-radio>
+            <el-radio v-model="role" label="3">超级管理员</el-radio>
           </div>
 
           <div class="button">
@@ -45,6 +49,13 @@
 
 export default {
   name: "Login",
+  data() {
+    return {
+      username: "",
+      password: "",
+      role: "1",
+    };
+  },
 };
 </script>
 
