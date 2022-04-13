@@ -13,9 +13,9 @@
       <div class="signin">新闻推荐系统</div>
       <div class="form">
         <div>
-          <div class="username">用户名</div>
+          <div class="phone">手机号</div>
           <div>
-            <el-input class="input" v-model="username"></el-input>
+            <el-input class="input" v-model="phone"></el-input>
           </div>
           <div class="password">密码</div>
           <div>
@@ -32,7 +32,9 @@
           </div>
 
           <div class="button">
-            <el-button style="width: 100%" type="primary"> 登录 </el-button>
+            <el-button style="width: 100%" type="primary" @click="login">
+              登录
+            </el-button>
           </div>
         </div>
       </div>
@@ -46,15 +48,25 @@
 
 <script>
 // @ is an alias to /src
-
+const login = "/api/login";
 export default {
   name: "Login",
   data() {
     return {
-      username: "",
+      phone: "",
       password: "",
       role: "1",
     };
+  },
+  methods: {
+    login: function () {
+      const { phone, password } = this;
+      if (this.role === "1") {
+        this.$axios.post(
+          `${login}/userLogin?phone=${phone}&password=${password}`
+        );
+      }
+    },
   },
 };
 </script>
@@ -89,7 +101,7 @@ export default {
   background-color: #f6f8fa;
   width: 350px;
 }
-.username {
+.phone {
   margin-bottom: 8px;
   font-weight: 400;
   text-align: left;
