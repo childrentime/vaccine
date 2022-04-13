@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="main">
-      <div class="signin">新闻推荐系统</div>
+      <div class="signin">接种管理系统</div>
       <div class="form">
         <div>
           <div class="phone">手机号</div>
