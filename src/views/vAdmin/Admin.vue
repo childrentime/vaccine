@@ -1,16 +1,16 @@
 <template>
   <div class="container">
-    <v-header></v-header>
+    <v-header :user="user"></v-header>
     <div class="main">
       <div class="slider">
         <el-menu
-          :default-active="$route.path.substring(7)"
+          :default-active="$route.path.substring(8)"
           class="list"
           light
           router
         >
           <el-menu-item
-            v-for="item in $router.options.routes[3].children"
+            v-for="item in $router.options.routes[4].children"
             :index="item.path"
             :key="item.name"
             class="item"
@@ -30,10 +30,42 @@
 
 <script>
 import header from "../../components/Header/header.vue";
+
+const prefix = "/api/user";
 export default {
   name: "VAdmin",
+  data() {
+    return {
+      user: {
+        name: "",
+        gender: "",
+        phone: "",
+        card: "",
+        title: "",
+        address: "",
+      },
+    };
+  },
   created() {
-    console.log(this.$route.path.substring(7));
+    const vadminId = sessionStorage.getItem("vadminId");
+    if (!vadminId) {
+      this.$message({
+        showClose: true,
+        message: "未登录，正在跳转",
+        type: "error",
+        duration: 2000,
+        onClose: () => {
+          this.$router.push("/login");
+        },
+      });
+      return;
+    }
+    this.$axios.get(`${prefix}/getVadmin?vAdminId=${vadminId}`).then((data) => {
+      const { data: user } = data.data;
+      console.log(user);
+      this.user = user;
+    });
+    console.log(this.$route.path.substring(8));
     console.log(this.$router);
   },
   components: {

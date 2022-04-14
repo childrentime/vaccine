@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <!-- <div>
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="审批人">
           <el-input v-model="formInline.user" placeholder="审批人"></el-input>
@@ -21,7 +21,7 @@
           <el-button type="primary" @click="onSubmit">查询</el-button>
         </el-form-item>
       </el-form>
-    </div>
+    </div> -->
     <div>
       <el-button type="primary">新增</el-button>
     </div>
@@ -29,11 +29,15 @@
       <el-row>
         <el-col :span="24">
           <el-table :data="tableData" border style="width: 100%" height="450">
-            <el-table-column prop="date" label="日期" width="180">
+            <el-table-column prop="name" label="疫苗名称" width="180">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="180">
+            <el-table-column prop="frequency" label="类型" width="180">
             </el-table-column>
-            <el-table-column prop="address" label="地址" width="500">
+            <el-table-column prop="startTime" label="开始时间" width="200">
+            </el-table-column>
+            <el-table-column prop="endTime" label="结束时间" width="200">
+            </el-table-column>
+            <el-table-column prop="capacity" label="容量">
             </el-table-column> </el-table
         ></el-col>
       </el-row>
@@ -42,6 +46,7 @@
 </template>
 
 <script>
+const prefix = "/api/vacc";
 export default {
   name: "Appointment",
   data() {
@@ -52,109 +57,15 @@ export default {
         phone: "",
         card: "",
       },
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      tableData: [],
     };
+  },
+  created() {
+    const adminId = sessionStorage.getItem("vadminId");
+    this.$axios.get(`${prefix}/getVacc?adminId=${adminId}`).then((data) => {
+      const { data: tableData } = data.data;
+      this.tableData = tableData;
+    });
   },
   methods: {
     onSubmit() {

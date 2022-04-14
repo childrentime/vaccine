@@ -5,6 +5,8 @@ import Login from "../views/Login.vue";
 import Admin from "../views/admin/Admin.vue";
 import Register from "../views/Register.vue";
 import User from "../views/admin/user/User.vue";
+import VAdmin from "../views/vAdmin/Admin.vue";
+import Appointment from "../views/vAdmin/appointment/appointment.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -32,6 +34,18 @@ const routes = [
         path: "user",
         component: User,
         name: "用户管理",
+      },
+    ],
+  },
+  {
+    path: "/vadmin",
+    name: "VAdmin",
+    component: VAdmin,
+    children: [
+      {
+        path: "appointment",
+        component: Appointment,
+        name: "预约管理",
       },
     ],
   },

@@ -80,9 +80,10 @@ export default {
         this.$axios
           .post(`${login}/vAdminLogin?phone=${phone}&password=${password}`)
           .then((data) => {
-            const { code } = data.data;
+            const { code, data: id } = data.data;
             if (code === 200) {
-              this.$router.push("/vAdmin");
+              sessionStorage.setItem("vadminId", id);
+              this.$router.push("/vAdmin/appointment");
             } else {
               this.$message({
                 showClose: true,
