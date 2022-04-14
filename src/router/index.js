@@ -45,7 +45,7 @@ const routes = [
       {
         path: "appointment",
         component: Appointment,
-        name: "预约管理",
+        name: "疫苗管理",
       },
     ],
   },
