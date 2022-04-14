@@ -62,9 +62,35 @@ export default {
     login: function () {
       const { phone, password } = this;
       if (this.role === "1") {
-        this.$axios.post(
-          `${login}/userLogin?phone=${phone}&password=${password}`
-        );
+        this.$axios
+          .post(`${login}/userLogin?phone=${phone}&password=${password}`)
+          .then((data) => {
+            const { code } = data.data;
+            if (code === 200) {
+              this.$router.push("/user");
+            } else {
+              this.$message({
+                showClose: true,
+                message: "密码错误",
+                type: "error",
+              });
+            }
+          });
+      } else if (this.role === "2") {
+        this.$axios
+          .post(`${login}/vAdminLogin?phone=${phone}&password=${password}`)
+          .then((data) => {
+            const { code } = data.data;
+            if (code === 200) {
+              this.$router.push("/vAdmin");
+            } else {
+              this.$message({
+                showClose: true,
+                message: "密码错误",
+                type: "error",
+              });
+            }
+          });
       }
     },
   },

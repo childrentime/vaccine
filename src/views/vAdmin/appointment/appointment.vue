@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: "User",
+  name: "Appointment",
   data() {
     return {
       formInline: {

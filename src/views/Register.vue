@@ -66,6 +66,25 @@
                   <el-radio label="1" v-model="gender">男</el-radio>
                   <el-radio label="2" v-model="gender">女</el-radio>
                 </div>
+                <template v-if="extra">
+                  <div class="formItem">
+                    <div class="label" style="margin-bottom: 10px">
+                      输入接种点名称
+                    </div>
+                    <el-input class="input" v-model="title"></el-input>
+                  </div>
+                  <div class="formItem">
+                    <div class="label" style="margin-bottom: 10px">
+                      输入接种点地址
+                    </div>
+                    <el-cascader
+                      size="large"
+                      :options="options"
+                      v-model="selectedOptions"
+                    >
+                    </el-cascader>
+                  </div>
+                </template>
                 <div class="formItem">
                   <el-button
                     type="primary"
@@ -74,7 +93,9 @@
                   >
                     用户注册
                   </el-button>
-                  <el-button type="primary"> 接种点管理员注册 </el-button>
+                  <el-button type="primary" @click="vAdminRegister">
+                    接种点管理员注册
+                  </el-button>
                 </div>
               </div>
             </div>
@@ -102,6 +123,7 @@
 </template>
 
 <script>
+import { regionData } from "element-china-area-data";
 // @ is an alias to /src
 const login = "/api/login";
 export default {
@@ -113,16 +135,106 @@ export default {
       phone: "",
       password: "",
       gender: "1",
+      extra: false,
+      title: "",
+      options: regionData,
+      selectedOptions: [],
     };
   },
   methods: {
+    validate() {
+      const { phone, password, card, gender, name } = this;
+      if (!phone || !password || !gender || !name || !card) {
+        this.$message({
+          showClose: true,
+          message: "请完善表单信息",
+          type: "info",
+        });
+        return false;
+      }
+      if (phone.length !== 11) {
+        this.$message({
+          showClose: true,
+          message: "手机号长度应该为11位",
+          type: "info",
+        });
+        return false;
+      }
+      if (card.length !== 18) {
+        this.$message({
+          showClose: true,
+          message: "身份证长度应该为18位",
+          type: "info",
+        });
+        return false;
+      }
+      return true;
+    },
     userRegister: function () {
+      if (!this.validate()) {
+        return;
+      }
       const { phone, password, card, gender, name } = this;
       const sex = gender === "1" ? "男" : "女";
 
-      this.$axios.post(
-        `${login}/userRegister?phone=${phone}&password=${password}&card=${card}&gender=${sex}&name=${name}`
-      );
+      this.$axios
+        .post(
+          `${login}/userRegister?phone=${phone}&password=${password}&card=${card}&gender=${sex}&name=${name}`
+        )
+        .then((data) => {
+          const { code } = data.data;
+          if (code === 200) {
+            this.$message({
+              showClose: true,
+              message: "注册成功",
+              type: "success",
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: "注册失败，手机号重复",
+              type: "error",
+            });
+          }
+        });
+    },
+    vAdminRegister: function () {
+      if (!this.validate()) {
+        return;
+      }
+      const { phone, password, card, gender, name, title, selectedOptions } =
+        this;
+      const sex = gender === "1" ? "男" : "女";
+      const address = selectedOptions.toString();
+      if (title.length === 0 || address.length === 0) {
+        this.$message({
+          showClose: true,
+          message: "请完善表单信息",
+          type: "info",
+        });
+        this.extra = true;
+        return;
+      }
+      this.$axios
+        .post(
+          `${login}/vAdminRegister?phone=${phone}&password=${password}&card=${card}&gender=${sex}&name=${name}&title=${title}&address=${address}`
+        )
+        .then((data) => {
+          const { code } = data.data;
+          if (code === 200) {
+            this.$message({
+              showClose: true,
+              message: "注册成功",
+              type: "success",
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: "注册失败，手机号重复",
+              type: "error",
+            });
+          }
+        });
     },
   },
 };
