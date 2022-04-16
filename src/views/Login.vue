@@ -65,9 +65,10 @@ export default {
         this.$axios
           .post(`${login}/userLogin?phone=${phone}&password=${password}`)
           .then((data) => {
-            const { code } = data.data;
+            const { code, data: id } = data.data;
             if (code === 200) {
-              this.$router.push("/user");
+              sessionStorage.setItem("userId", id);
+              this.$router.push("/uadmin/pre");
             } else {
               this.$message({
                 showClose: true,

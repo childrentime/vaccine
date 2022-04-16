@@ -202,8 +202,7 @@ export default {
       if (!this.validate()) {
         return;
       }
-      const { phone, password, card, gender, name, title, selectedOptions } =
-        this;
+      const { phone, password, card, gender, name, title, selectedOptions } = this;
       const sex = gender === "1" ? "男" : "女";
       const address = selectedOptions.toString();
       if (title.length === 0 || address.length === 0) {

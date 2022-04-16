@@ -10,7 +10,7 @@
           router
         >
           <el-menu-item
-            v-for="item in $router.options.routes[4].children"
+            v-for="item in $router.options.routes[5].children"
             :index="item.path"
             :key="item.name"
             class="item"
@@ -29,11 +29,11 @@
 </template>
 
 <script>
-import header from "../../components/Header/header.vue";
+import header from "../../components/Header/user-header.vue";
 
 const prefix = "/api/user";
 export default {
-  name: "VAdmin",
+  name: "UAdmin",
   data() {
     return {
       user: {
@@ -41,21 +41,18 @@ export default {
         gender: "",
         phone: "",
         card: "",
-        title: "",
-        address: "",
       },
     };
   },
   created() {
     this.getUser();
-
     console.log(this.$route.path.substring(8));
     console.log(this.$router);
   },
   methods: {
     getUser: async function () {
-      const vadminId = sessionStorage.getItem("vadminId");
-      if (!vadminId) {
+      const userId = sessionStorage.getItem("userId");
+      if (!userId) {
         this.$message({
           showClose: true,
           message: "未登录，正在跳转",
@@ -67,9 +64,7 @@ export default {
         });
         return;
       }
-      const data = await this.$axios.get(
-        `${prefix}/getVadmin?vAdminId=${vadminId}`
-      );
+      const data = await this.$axios.get(`${prefix}/getUser?userId=${userId}`);
       const { data: user } = data.data;
       this.user = user;
     },
@@ -109,6 +104,7 @@ export default {
 .content {
   padding: 20px;
   flex: auto;
+  max-width: 1200px;
 }
 
 .el-menu {

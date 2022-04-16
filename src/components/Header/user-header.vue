@@ -33,25 +33,6 @@
         <el-form-item label="身份证" :label-width="formLabelWidth" prop="card">
           <el-input v-model="form.card" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item
-          label="接种点名称"
-          :label-width="formLabelWidth"
-          prop="title"
-        >
-          <el-input v-model="form.title" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item
-          label="地址"
-          :label-width="formLabelWidth"
-          prop="selectedOptions"
-        >
-          <el-cascader
-            size="large"
-            :options="options"
-            v-model="form.selectedOptions"
-          >
-          </el-cascader>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="resetForm('form')">取 消</el-button>
@@ -61,9 +42,7 @@
   </div>
 </template>
 <script>
-import { regionData } from "element-china-area-data";
-
-const prefix = "/api/user/updateVAdmin";
+const prefix = "/api/user/updateUser";
 export default {
   props: {
     user: {},
@@ -71,14 +50,12 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
-      options: regionData,
+
       form: {
         name: "",
         sex: "",
         phone: "",
         card: "",
-        title: "",
-        selectedOptions: [],
       },
       rules: {
         name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
@@ -91,29 +68,23 @@ export default {
           { required: true, message: "请输入手机号", trigger: "blur" },
           { min: 18, max: 18, message: "长度为18个字符", trigger: "blur" },
         ],
-        title: [
-          { required: true, message: "请输入接种点名称", trigger: "blur" },
-        ],
-        selectedOptions: [
-          { required: true, message: "请选择地址", trigger: "change" },
-        ],
       },
       formLabelWidth: "120px",
     };
   },
   methods: {
     exit: function () {
-      sessionStorage.removeItem("vadminId");
+      sessionStorage.removeItem("userId");
       this.$router.push("/login");
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const { phone, card, sex, name, title, selectedOptions } = this.form;
-          const adminId = sessionStorage.getItem("vadminId");
+          const { phone, card, sex, name } = this.form;
+          const userId = sessionStorage.getItem("userId");
           this.$axios
             .post(
-              `${prefix}?adminId=${adminId}&phone=${phone}&card=${card}&gender=${sex}&name=${name}&title=${title}&address=${selectedOptions.toString()}`
+              `${prefix}?userId=${userId}&phone=${phone}&card=${card}&gender=${sex}&name=${name}`
             )
             .then((data) => {
               const { code } = data.data;
@@ -148,10 +119,8 @@ export default {
       //监听props中的属性
       this.form.name = val.name;
       this.form.sex = val.gender;
-      this.form.title = val.title;
       this.form.phone = val.phone;
       this.form.card = val.card;
-      this.form.selectedOptions = val.address.split(",");
     },
   },
 };

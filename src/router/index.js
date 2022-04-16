@@ -7,6 +7,9 @@ import Register from "../views/Register.vue";
 import User from "../views/admin/user/User.vue";
 import VAdmin from "../views/vAdmin/Admin.vue";
 import Appointment from "../views/vAdmin/appointment/appointment.vue";
+import UAdmin from "../views/user/Admin.vue";
+import Upre from "../views/user/pre/Pre.vue";
+import Ume from "../views/user/me/Me.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -46,6 +49,23 @@ const routes = [
         path: "appointment",
         component: Appointment,
         name: "疫苗管理",
+      },
+    ],
+  },
+  {
+    path: "/uadmin",
+    name: "UAdmin",
+    component: UAdmin,
+    children: [
+      {
+        path: "pre",
+        component: Upre,
+        name: "预约管理",
+      },
+      {
+        path: "me",
+        component: Ume,
+        name: "我的预约",
       },
     ],
   },
